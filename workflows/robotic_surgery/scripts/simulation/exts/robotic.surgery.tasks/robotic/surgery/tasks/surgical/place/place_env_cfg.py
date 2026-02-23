@@ -265,5 +265,5 @@ class PlaceEnvCfg(ManagerBasedRLEnvCfg):
         # Pick-and-place needs more time than a pure lift task
         self.episode_length_s = 5.0
         self.sim.dt = 1.0 / 200.0
-        self.viewer.eye = (0.0, -0.2, 0.2)
+        self.viewer.eye = (0.0, -0.15, 0.5)
         self.viewer.lookat = (0.0, 0.0, 0.0)
