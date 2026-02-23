@@ -120,8 +120,12 @@ class BlockPlaceEnvCfg(PlaceEnvCfg):
         self.scene.camera = TiledCameraCfg(
             prim_path="{ENV_REGEX_NS}/Camera",
             offset=TiledCameraCfg.OffsetCfg(
-                pos=(0.0, 0.0, 0.15),
-                rot=(1.0, 0.0, 0.0, 0.0),  # identity → looking straight down
+                # 15 cm back (-Y) and 15 cm up gives a 45° viewing angle.
+                # Rotating +45° around X tilts the look direction from straight
+                # down (0,0,-1) to (0,+0.707,-0.707), so the optical axis passes
+                # exactly through the env-local origin.
+                pos=(0.0, -0.15, 0.15),
+                rot=(0.9239, 0.3827, 0.0, 0.0),  # +45° around X
                 convention="world",
             ),
             spawn=sim_utils.PinholeCameraCfg(
