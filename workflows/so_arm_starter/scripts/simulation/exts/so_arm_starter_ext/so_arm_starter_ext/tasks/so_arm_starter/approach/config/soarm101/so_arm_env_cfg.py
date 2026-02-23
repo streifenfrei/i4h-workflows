@@ -151,7 +151,7 @@ class SoArm101TableSceneCfg(InteractiveSceneCfg):
 
     room: TiledCameraCfg = TiledCameraCfg(
         prim_path="{ENV_REGEX_NS}/RoomCamera",
-        offset=TiledCameraCfg.OffsetCfg(pos=(0.25, 0.08, 1.0), rot=(0.0, 0.7071, -0.7071, 0.0), convention="ros"),
+        offset=TiledCameraCfg.OffsetCfg(pos=(0.25, 0.08, 1.5), rot=(0.0, 0.7071, -0.7071, 0.0), convention="ros"),
         data_types=["rgb"],
         spawn=sim_utils.PinholeCameraCfg(
             focal_length=16.0,
