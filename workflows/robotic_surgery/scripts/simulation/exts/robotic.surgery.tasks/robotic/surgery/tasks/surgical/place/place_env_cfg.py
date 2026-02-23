@@ -266,4 +266,4 @@ class PlaceEnvCfg(ManagerBasedRLEnvCfg):
         self.episode_length_s = 5.0
         self.sim.dt = 1.0 / 200.0
         self.viewer.eye = (0.0, -0.15, 0.5)
-        self.viewer.lookat = (0.0, 0.0, 0.0)
+        self.viewer.lookat = (0.0, 0.0, 0.4)
