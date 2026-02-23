@@ -377,8 +377,8 @@ class SOARMStarterEnvCfg(ManagerBasedRLEnvCfg):
 
         self.decimation = 1
         self.episode_length_s = 8.0
-        self.viewer.eye = (0.25, 1.5, 2.5)
-        self.viewer.lookat = (0.25, 0.1, 0.1)
+        self.viewer.eye = (2.0, 2.0, 1.5)
+        self.viewer.lookat = (0.0, 0.0, 0.2)
         self.actions = init_action_cfg(self.actions, device="keyboard")
 
         self.sim.physx.bounce_threshold_velocity = 0.01
