@@ -120,13 +120,15 @@ class BlockPlaceEnvCfg(PlaceEnvCfg):
         self.scene.camera = TiledCameraCfg(
             prim_path="{ENV_REGEX_NS}/Camera",
             offset=TiledCameraCfg.OffsetCfg(
-                # 15 cm back (-Y) and 15 cm up gives a 45° viewing angle.
-                # Rotating +45° around X tilts the look direction from straight
-                # down (0,0,-1) to (0,+0.707,-0.707), so the optical axis passes
-                # exactly through the env-local origin.
+                # 15 cm back (-Y) and 15 cm up → 45° viewing angle.
+                # In ROS convention the camera looks along its +Z axis.
+                # (0, 0.7071, -0.7071, 0) is the straight-down rotation (from
+                # the SO-ARM example).  Tilting that 45° toward +Y (rotating
+                # -135° around X) gives look direction (0, +0.707, -0.707),
+                # whose ray from (0, -0.15, 0.15) passes through the origin.
                 pos=(0.0, -0.15, 0.15),
-                rot=(0.9239, 0.3827, 0.0, 0.0),  # +45° around X
-                convention="world",
+                rot=(0.3827, -0.9239, 0.0, 0.0),  # -135° around X
+                convention="ros",
             ),
             spawn=sim_utils.PinholeCameraCfg(
                 focal_length=24.0,
