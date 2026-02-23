@@ -70,13 +70,16 @@ def reset_block_and_target_positions(
         blk_y = torch.where(too_close, new_y, blk_y)
 
     # Apply block state
+    # default_root_state is in asset-local space; add env origin to get world space.
     block_states = block.data.default_root_state[env_ids].clone()
+    block_states[:, :3] += env.scene.env_origins[env_ids]
     block_states[:, 0] += blk_x
     block_states[:, 1] += blk_y
     block.write_root_state_to_sim(block_states, env_ids=env_ids)
 
     # Apply target state
     target_states = target.data.default_root_state[env_ids].clone()
+    target_states[:, :3] += env.scene.env_origins[env_ids]
     target_states[:, 0] += tgt_x
     target_states[:, 1] += tgt_y
     target.write_root_state_to_sim(target_states, env_ids=env_ids)

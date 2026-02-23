@@ -25,6 +25,7 @@ from isaaclab.managers import RewardTermCfg as RewTerm
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.managers import TerminationTermCfg as DoneTerm
 from isaaclab.scene import InteractiveSceneCfg
+from isaaclab.sensors import TiledCameraCfg
 from isaaclab.sensors.frame_transformer.frame_transformer_cfg import FrameTransformerCfg
 from isaaclab.sim.spawners.from_files.from_files_cfg import GroundPlaneCfg, UsdFileCfg
 from isaaclab.utils import configclass
@@ -52,6 +53,8 @@ class ObjectTableSceneCfg(InteractiveSceneCfg):
     object: RigidObjectCfg = MISSING
     # Kinematic visual marker defining the goal placement zone
     target_area: RigidObjectCfg = MISSING
+    # Overhead camera; populated by the agent env cfg
+    camera: TiledCameraCfg = MISSING
 
     # Table
     table = AssetBaseCfg(
@@ -103,7 +106,12 @@ class ObservationsCfg:
         """Concatenated policy observation vector (per env):
 
         joint_pos (6) | joint_vel (6) | block_pos_robot_frame (3) |
-        target_pos_robot_frame (3) | last_action (6 or 7)
+        target_pos_robot_frame (3) | last_action (6 or 7) |
+        camera_features (576)
+
+        Total: ~601 floats (IK-abs) / ~600 floats (joint-pos).
+        The 576-D visual features come from a frozen MobileNetV3-Small
+        encoder applied to the 64×64 overhead camera image.
         """
 
         joint_pos = ObsTerm(func=mdp.joint_pos_rel)
@@ -111,6 +119,7 @@ class ObservationsCfg:
         object_position = ObsTerm(func=mdp.object_position_in_robot_root_frame)
         target_position = ObsTerm(func=mdp.target_position_in_robot_root_frame)
         actions = ObsTerm(func=mdp.last_action)
+        camera_features = ObsTerm(func=mdp.camera_features)
 
         def __post_init__(self):
             self.enable_corruption = True

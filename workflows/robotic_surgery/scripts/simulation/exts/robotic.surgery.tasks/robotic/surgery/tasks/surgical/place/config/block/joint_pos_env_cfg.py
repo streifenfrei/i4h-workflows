@@ -7,7 +7,7 @@
 
 import isaaclab.sim as sim_utils
 from isaaclab.assets import RigidObjectCfg
-from isaaclab.sensors import FrameTransformerCfg
+from isaaclab.sensors import FrameTransformerCfg, TiledCameraCfg
 from isaaclab.sim.schemas.schemas_cfg import RigidBodyPropertiesCfg
 from isaaclab.sim.spawners.from_files.from_files_cfg import UsdFileCfg
 from isaaclab.utils import configclass
@@ -101,6 +101,38 @@ class BlockPlaceEnvCfg(PlaceEnvCfg):
                     roughness=1.0,
                 ),
             ),
+        )
+
+        # ------------------------------------------------------------------ #
+        # Overhead camera for visual observations.
+        #
+        # Positioned 15 cm above the env origin (≈ table surface), looking
+        # straight down (USD cameras look along local -Z; identity rotation
+        # aligns local -Z with world -Z → downward view).
+        #
+        # At this height, focal_length=24 gives a horizontal FOV of ~47° and
+        # a ground footprint of ~0.13 m, which comfortably covers the ±0.05 m
+        # workspace.  With 64×64 pixels each pixel covers ~2 mm – enough to
+        # resolve the 11 mm block and 30 mm target square.
+        #
+        # Render interval is inherited from decimation (every 4 sim steps).
+        # ------------------------------------------------------------------ #
+        self.scene.camera = TiledCameraCfg(
+            prim_path="{ENV_REGEX_NS}/Camera",
+            offset=TiledCameraCfg.OffsetCfg(
+                pos=(0.0, 0.0, 0.15),
+                rot=(1.0, 0.0, 0.0, 0.0),  # identity → looking straight down
+                convention="world",
+            ),
+            spawn=sim_utils.PinholeCameraCfg(
+                focal_length=24.0,
+                focus_distance=400.0,
+                horizontal_aperture=20.955,
+                clipping_range=(0.01, 1.0e5),
+            ),
+            data_types=["rgb"],
+            width=64,
+            height=64,
         )
 
         # ------------------------------------------------------------------ #

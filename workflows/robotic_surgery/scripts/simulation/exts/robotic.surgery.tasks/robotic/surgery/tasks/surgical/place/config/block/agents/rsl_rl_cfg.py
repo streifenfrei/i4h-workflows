@@ -16,8 +16,10 @@ class PlaceBlockPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     empirical_normalization = False
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
-        actor_hidden_dims=[256, 128, 64],
-        critic_hidden_dims=[256, 128, 64],
+        # Wider layers to absorb the 576-D visual feature vector that is
+        # concatenated with the 25-D proprioceptive state (~601 total inputs).
+        actor_hidden_dims=[512, 256, 128],
+        critic_hidden_dims=[512, 256, 128],
         activation="elu",
     )
     algorithm = RslRlPpoAlgorithmCfg(
