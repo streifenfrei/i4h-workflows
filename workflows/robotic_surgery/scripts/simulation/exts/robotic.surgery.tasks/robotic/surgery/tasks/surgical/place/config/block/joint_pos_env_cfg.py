@@ -131,8 +131,8 @@ class BlockPlaceEnvCfg(PlaceEnvCfg):
                 clipping_range=(0.01, 1.0e5),
             ),
             data_types=["rgb"],
-            width=64,
-            height=64,
+            width=280,
+            height=150,
         )
 
         # ------------------------------------------------------------------ #
